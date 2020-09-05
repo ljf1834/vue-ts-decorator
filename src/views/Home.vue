@@ -1,18 +1,25 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <el-container style="height: 100%">
+    <el-aside><nav-menu /></el-aside>
+    <el-container>
+      <el-header>Header</el-header>
+      <el-main>
+        <router-view />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
-
+import Menu from '@/views/base/menu.vue';
 @Component({
-  components: {
-    HelloWorld,
-  },
+  components: { 'nav-menu': Menu }
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  beforeCreate() {
+    console.log('to home', this.$storage);
+    this.axios.post('/api/userinfo').then(res => console.log(res));
+  }
+}
 </script>

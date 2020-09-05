@@ -3,6 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import Axios from './core/axios';
+Axios();
+
+import Storage from './utils/storage';
+Vue.use(Storage)
+
+
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+
 Vue.config.productionTip = false
 
 new Vue({
