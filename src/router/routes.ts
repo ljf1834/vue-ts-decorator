@@ -18,12 +18,12 @@ const routes: RouteConfig[] = [
         meta: { keepAlive: '组织架构' },
         component: () => import('@/views/organization/index.vue')
       },
-      {
-        path: 'error/:type',
-        name: '404',
-        component: () => import('@/views/error.vue')
-      },
     ]
+  },
+  {
+    path: '/error/:type',
+    name: '404',
+    component: () => import('@/views/error.vue')
   },
   {
     path: '/login',

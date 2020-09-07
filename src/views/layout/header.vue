@@ -12,10 +12,10 @@
           <span>用户名</span>
           <i class="el-icon-arrow-down"></i>
         </div>
-        <el-dropdown-menu slot="dropdown" style="width: 120px">
+        <el-dropdown-menu slot="dropdown">
           <el-dropdown-item icon="el-icon-user" disabled>个人中心</el-dropdown-item>
           <el-dropdown-item icon="el-icon-setting" disabled>主题设置</el-dropdown-item>
-          <el-dropdown-item divided command="toLogin">退出登录</el-dropdown-item>
+          <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -47,10 +47,9 @@ export default class extends Vue {
   }
 
   commandList = new Map([
-    ['toLogin', () => this.$router.push('/login')]
+    ['logout', () => this.$router.push('/login')]
   ]);
   
-
   avatar = require('@/assets/default-boy.png');
 }
 </script>
