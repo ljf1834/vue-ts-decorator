@@ -9,7 +9,7 @@
       <el-dropdown @command="commandList.get($event)()">
         <div class="el-dropdown-link">
           <el-avatar :size="28" :src="avatar" />
-          <span>用户名</span>
+          <span class="user-name">用户名</span>
           <i class="el-icon-arrow-down"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -83,5 +83,8 @@ export default class extends Vue {
 /deep/ .el-avatar {
   vertical-align: middle;
   margin-right: 8px;
+}
+.user-name {
+  margin-right: 3px;
 }
 </style>

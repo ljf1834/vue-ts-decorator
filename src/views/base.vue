@@ -1,6 +1,6 @@
 <template>
   <el-container style="height: 100%">
-    <el-aside style="width: 260px"><lay-menu /></el-aside>
+    <el-aside style="width: 220px"><lay-menu /></el-aside>
     <el-container>
       <el-header><lay-header /></el-header>
       <el-main>
