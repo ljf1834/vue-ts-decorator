@@ -30,6 +30,7 @@ const userStore = namespace('route')
   }
 })
 export default class Home extends Vue {
+  
   transitionName = '';
 
   keepAlive: any[] = [];
@@ -47,7 +48,6 @@ export default class Home extends Vue {
 
   @Watch('$route')
   routeChange(to: any, from: any) {
-    console.log(to, from)
     this.setCurrentRoute(to);
     if (to.meta.keepAlive) {
       let isHas = this.routeTabs.some(n => n.name === to.name);

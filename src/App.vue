@@ -13,6 +13,9 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
+.spinner {
+  display: none !important;
+}
 .is-disabled {
   cursor: no-drop!important;
 }
