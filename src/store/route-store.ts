@@ -10,15 +10,15 @@ const routeStore =  {
       state.currentRoute = payload
     },
     setRouteTab(state: RouteState, payload: any) {
+      state.routeTabs.push(payload);
+    },
+    removeRouteTab(state: RouteState, payload: string) {
       if (payload) {
-        state.routeTabs.push(payload);
+        let index = state.routeTabs.findIndex(n => n.path === payload);
+        state.routeTabs.splice(index, 1);
       } else {
         state.routeTabs = [];
       }
-    },
-    removeRouteTab(state: RouteState, payload: string) {
-      let index = state.routeTabs.findIndex(n => n.path === payload);
-      state.routeTabs.splice(index, 1);
     }
   },
   actions: {

@@ -45,17 +45,17 @@ export default class Login extends Vue {
     formGroup: ElForm
   };
   async submit() {
-    console.log(this.sourcePage)
-    let valid = await this.$refs.formGroup.validate();
-    let { username, password } = this.formGroup;
-    if (valid) {
-      let res: ResponseBody = await this.axios.post('/user/login', { username, password: encrypt(password) });
-      if (res.code === 200) {
-        this.$router.push(this.sourcePage.path);
-      } else {
-        this.$message.warning(res.message);
-      }
-    }
+    this.$router.push(this.sourcePage.path);
+    // let valid = await this.$refs.formGroup.validate();
+    // let { username, password } = this.formGroup;
+    // if (valid) {
+    //   let res: ResponseBody = await this.axios.post('/user/login', { username, password: encrypt(password) });
+    //   if (res.code === 200) {
+    //     this.$router.push(this.sourcePage.path);
+    //   } else {
+    //     this.$message.warning(res.message);
+    //   }
+    // }
   }
 }
 </script>

@@ -22,11 +22,9 @@ import { namespace } from 'vuex-class';
 const userStore = namespace('route')
 @Component({
   components: { LayMenu, LayHeader },
-  beforeRouteLeave(to, from, next) {
-    if (to.name === 'login') {
-      // new Home().setRouteTab(null);
-    }
-    next()
+  beforeRouteLeave(to: any, from: any, next: Function) {
+    (this as any).removeRouteTab(null);
+    next();
   }
 })
 export default class Home extends Vue {
@@ -38,6 +36,8 @@ export default class Home extends Vue {
   @userStore.Mutation('setRouteTab') setRouteTab!: Function;
 
   @userStore.Mutation('setCurrentRoute') setCurrentRoute!: Function;
+
+  @userStore.Mutation('removeRouteTab') removeRouteTab!: any;
 
   @userStore.State('routeTabs') routeTabs!: any[];
 
