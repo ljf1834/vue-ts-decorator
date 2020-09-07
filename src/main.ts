@@ -17,25 +17,30 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 
-Vue.mixin({
+(() => {
   /* -------------- 离开页面时删除不存在于标签页的keepAlive缓存 --------------- */
-  beforeRouteLeave(to, from, next) {
-    let _this_: any = this;
-    let _store_: any = store;
-    if (_this_.$vnode && _this_.$vnode.parent && _this_.$vnode.parent.componentInstance && _this_.$vnode.parent.componentInstance.cache) {
+  let cache: any = null;
+  Vue.mixin({
+    beforeRouteLeave(to, from, next) {
+      let _this_: any = this;
+      let _store_: any = store;
       let routeTabs = _store_.state.route.routeTabs;
-      let keys = Object.keys(_this_.$vnode.parent.componentInstance.cache);
-      keys.map((key: string) => {
-        let hasCache = routeTabs.some((route: any) => key.includes(route.name));
-        if (!hasCache) {
-          let cache = _this_.$vnode.parent.componentInstance.cache;
-          delete cache[key];
-        }
-      })
+      if (!cache && _this_.$vnode && _this_.$vnode.parent && _this_.$vnode.parent.componentInstance && _this_.$vnode.parent.componentInstance.cache) {
+        cache = _this_.$vnode.parent.componentInstance.cache;
+      }
+      if (cache) {
+        let keys = Object.keys(cache);
+        keys.map((key: string) => {
+          let hasCache = routeTabs.some((route: any) => key.includes(route.name));
+          if (!hasCache) {
+            delete cache[key];
+          }
+        })
+      }
+      next();
     }
-    next();
-  }
-})
+  })
+});
 
 new Vue({
   router,
