@@ -19,9 +19,16 @@ import { Component, Vue } from 'vue-property-decorator';
 import { ElForm } from 'element-ui/types/form';
 import { decrypt, encrypt } from '@/utils/aes';
 import { ResponseBody } from '@/core/interfaces';
-@Component
+import { Route } from 'vue-router/types/router';
+@Component({
+  beforeRouteEnter(to: Route, from: Route, next: any) {
+    next((vm: Login) => {
+      vm.sourcePage = from;
+    })
+  }
+})
 export default class Login extends Vue {
-  init = false;
+
   formGroup = {
     username: null,
     password: null
@@ -31,16 +38,20 @@ export default class Login extends Vue {
     password: { required: true, message: '请输入密码！' }
   }
 
+  /* 记录来源，登录成功后直接返回至来源页面 */
+  sourcePage!: Route;
+
   public $refs!: {
     formGroup: ElForm
   };
   async submit() {
+    console.log(this.sourcePage)
     let valid = await this.$refs.formGroup.validate();
     let { username, password } = this.formGroup;
     if (valid) {
       let res: ResponseBody = await this.axios.post('/user/login', { username, password: encrypt(password) });
       if (res.code === 200) {
-        this.$router.push('/');
+        this.$router.push(this.sourcePage.path);
       } else {
         this.$message.warning(res.message);
       }

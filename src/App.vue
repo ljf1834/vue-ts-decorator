@@ -13,4 +13,7 @@ body, html {
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
 }
+.is-disabled {
+  cursor: no-drop!important;
+}
 </style>

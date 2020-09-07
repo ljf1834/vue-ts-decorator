@@ -3,11 +3,27 @@ import { RouteConfig } from 'vue-router';
 const routes: RouteConfig[] = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('../views/home.vue'),
-    beforeEnter(to, from, next) {
-      next();
-    }
+    redirect: '/index',
+    component: () => import('@/views/base.vue'),
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        meta: { keepAlive: '首页' },
+        component: () => import('@/views/index/index.vue')
+      },
+      {
+        path: 'organization',
+        name: 'organization',
+        meta: { keepAlive: '组织架构' },
+        component: () => import('@/views/organization/index.vue')
+      },
+      {
+        path: 'error/:type',
+        name: '404',
+        component: () => import('@/views/error.vue')
+      },
+    ]
   },
   {
     path: '/login',
@@ -15,9 +31,8 @@ const routes: RouteConfig[] = [
     component: () => import('@/views/login.vue')
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '*',
+    redirect: '/error/404'
   }
 ]
 export default routes;
