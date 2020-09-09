@@ -9,6 +9,9 @@ Axios();
 import Storage from './utils/storage';
 Vue.use(Storage)
 
+import Drawer from './utils/drawer';
+Vue.prototype.$drawer = Drawer;
+
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
