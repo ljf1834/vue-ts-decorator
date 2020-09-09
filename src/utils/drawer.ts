@@ -11,6 +11,7 @@ const create = (opt: DrawerCreate) => {
     mask: typeof opt.mask === 'undefined' ? true : opt.mask,
     maskClosable: typeof opt.maskClosable === 'undefined' ? true : opt.maskClosable,
     closable: typeof opt.closable === 'undefined' ? true : opt.closable,
+    close: opt.close || ((val?: any) => {})
   }
 
   const vm = new Vue({
@@ -19,13 +20,13 @@ const create = (opt: DrawerCreate) => {
       props: {
         ...options.props,
         drawerClose(val?: any) {
-          
+          remove(val);
         }
       }
     })
   }).$mount(); // $mount 生成真实dom, 挂载dom 挂载在哪里, 不传参的时候只生成不挂载，需要手动挂载
 
-  const carrier = document.getElementById('drawer') || document.createElement('div');
+  const carrier = document.createElement('div');
 
   let maskEl: HTMLElement = document.createElement('div');
   maskEl.className = 'drawer-mask';
@@ -38,9 +39,13 @@ const create = (opt: DrawerCreate) => {
     }
   }
   // 回收组件
-  let remove = () => {
-    maskEl.remove();
-    drawerBox.remove();
+  let remove = (val?: any) => {
+    options.close(val);
+    maskEl.className = 'drawer-mask active';
+    drawerBox.className = 'drawer-box active';
+    setTimeout(() => {
+      document.body.removeChild(carrier);
+    }, 500);
     vm.$children[0].$destroy(); // 销毁组件
   };
 
@@ -54,27 +59,16 @@ const create = (opt: DrawerCreate) => {
     if (options.closable) {
       let iconEl = document.createElement('i');
       iconEl.className = 'el-dialog__close el-icon el-icon-close';
-      iconEl.onclick = remove;
+      iconEl.onclick = () => { remove() };
       titleEl.appendChild(iconEl);
     }
     drawerBox.appendChild(titleEl);
   }
 
-
   drawerBox.appendChild(vm.$el);
   carrier.appendChild(drawerBox);
-
- 
-  let drawerRef = {
-    open: new Promise((resolve, reject) => {
-
-    }),
-    close: new Promise((resolve, reject) => {
-
-    })
-  };
-
-  return drawerRef
+  document.body.appendChild(carrier);
+  
 }
 
 export default { create };
@@ -82,7 +76,7 @@ export default { create };
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $drawer: { create: (options: DrawerCreate) => DrawerRef }
+    $drawer: { create: (options: DrawerCreate) => void }
   }
 }
 
@@ -94,8 +88,5 @@ interface DrawerCreate {
   maskClosable?: boolean;  // 点击蒙层是否允许关闭
   closable?: boolean;      // 是否展示右上角关闭按钮
   props?: object;          // 传入子组件的值
-}
-interface DrawerRef {
-  close: Promise<any>
-  open: Promise<any>
+  close?: (val?: any) => void
 }

@@ -9,25 +9,14 @@ import DraggableTable from '@/components/draggable-table.vue'
   name: 'organization'
 })
 export default class extends Vue {
-  n = 'o';
-
   open() {
-    let drawer = this.$drawer.create({
+    this.$drawer.create({
       title: '可拖动Table',
-      component: DraggableTable
+      component: DraggableTable,
+      close(e) {
+        console.log(e)
+      }
     });
-    drawer.close.then(v => console.log(v))
-    setTimeout(() => {
-      // drawer.remove();
-    }, 3000);
-
-    // let d = this.$drawer.create({
-    //   title: '标题',
-    //   width: 700,
-    //   mask: true,
-    //   content: DraggableTable,
-    //   props: {name: 'phuhoang'}
-    // })
   }
 
 }
