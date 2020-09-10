@@ -1,5 +1,4 @@
 import Vue, { Component } from 'vue';
-
 import './drawer.less';
 
 const create = (opt: DrawerCreate) => {
@@ -11,7 +10,8 @@ const create = (opt: DrawerCreate) => {
     mask: typeof opt.mask === 'undefined' ? true : opt.mask,
     maskClosable: typeof opt.maskClosable === 'undefined' ? true : opt.maskClosable,
     closable: typeof opt.closable === 'undefined' ? true : opt.closable,
-    close: opt.close || ((val?: any) => {})
+    close: opt.close || ((val?: any) => {}),
+    footed: typeof opt.footed === 'undefined' ? false : opt.footed,
   }
 
   const vm = new Vue({
@@ -52,6 +52,11 @@ const create = (opt: DrawerCreate) => {
   let drawerBox = document.createElement('div');
   drawerBox.className = 'drawer-box';
   drawerBox.style.width = options.width + 'px';
+
+  let drawerBody = document.createElement('div');
+  drawerBody.className = 'drawer-body';
+  drawerBody.appendChild(vm.$el);
+  drawerBox.appendChild(drawerBody);
   if (options.title) {
     let titleEl = document.createElement('div');
     titleEl.className = 'drawer-title';
@@ -62,17 +67,44 @@ const create = (opt: DrawerCreate) => {
       iconEl.onclick = () => { remove() };
       titleEl.appendChild(iconEl);
     }
-    drawerBox.appendChild(titleEl);
+    drawerBox.insertBefore(titleEl, drawerBox.children[0]);
+  }
+  if (options.footed) {
+    let drawerFooter = document.createElement('div');
+    drawerFooter.className = 'drawer-footer';
+    let closeBtn = document.createElement('button');
+    let saveBtn = document.createElement('button');
+    closeBtn.className = 'drawer-close-btn';
+    saveBtn.className = 'drawer-save-btn';
+    closeBtn.innerHTML = '<span>取消</span>';
+    saveBtn.innerHTML = '<span>确定</span>';
+    closeBtn.onclick = () => { remove(); }
+    saveBtn.onclick = () => {
+      let vmDW: any = vm.$children[0]
+      if (vmDW.confirm) {
+        saveBtn.innerHTML = `<i class="el-icon-loading"></i><span>加载中</span>`;
+        saveBtn.className = 'drawer-save-btn loading';
+        vmDW.confirm().then((res: any) => {
+          saveBtn.innerHTML = `<span>确定</span>`;
+          saveBtn.className = 'drawer-save-btn';
+          res && remove(res);
+        }).catch((err: any) => {
+          saveBtn.innerHTML = `<span>确定</span>`;
+          saveBtn.className = 'drawer-save-btn';
+        })
+      }
+    }
+    drawerFooter.appendChild(closeBtn)
+    drawerFooter.appendChild(saveBtn)
+    drawerBox.appendChild(drawerFooter);
   }
 
-  drawerBox.appendChild(vm.$el);
   carrier.appendChild(drawerBox);
   document.body.appendChild(carrier);
   
 }
 
-export default { create };
-
+export default { install: (vue: any) => (vue.prototype.$drawer = { create }) };
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -88,5 +120,6 @@ interface DrawerCreate {
   maskClosable?: boolean;  // 点击蒙层是否允许关闭
   closable?: boolean;      // 是否展示右上角关闭按钮
   props?: object;          // 传入子组件的值
-  close?: (val?: any) => void
+  close?: (val?: any) => void;
+  footed?: boolean;         // 是否拥有默认页脚
 }

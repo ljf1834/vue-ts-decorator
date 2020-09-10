@@ -37,13 +37,23 @@ export default class extends Vue {
   @userStore.Mutation('removeRouteTab') removeRouteTab!: Function;
 
   closeTab(path: string) {
+    /* ------------ 找到 keep-alive 暴力删除其 Cache */
+    try {
+      let vueComponent: any = this.$parent.$parent.$children[1].$vnode.componentInstance?.$children[0].$vnode.parent?.componentInstance
+      let cache = vueComponent.cache;
+      Object.keys(cache).map((key: string) => {
+        key.includes(path) && delete cache[key];
+      })
+    } catch (error) {
+      console.warn('清楚keep-alive缓存失败');
+    }
     this.removeRouteTab(path);
     let toPath = this.routeTabs[this.routeTabs.length - 1].path;
     toPath !== this.currentRoute.path && this.$router.push(toPath);
   }
 
   tabClick(el: any) {
-    this.$router.push(el.name);
+    this.$route.path !== el.name && this.$router.push(el.name);
   }
 
   commandList = new Map([

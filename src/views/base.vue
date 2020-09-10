@@ -1,6 +1,6 @@
 <template>
   <el-container style="height: 100%">
-    <el-aside style="width: 220px"><lay-menu /></el-aside>
+    <el-aside style="width: 220px; z-index: 2"><lay-menu /></el-aside>
     <el-container>
       <el-header><lay-header /></el-header>
       <el-main>
@@ -78,9 +78,10 @@ export default class Home extends Vue {
 .slide-right-leave-active,
 .slide-left-enter-active,
 .slide-left-leave-active {
-  will-change: transform;
+  width: 100%;
   transition: all 300ms;
   position: absolute;
+  z-index: 1;
 }
 .slide-right-enter {
   opacity: 0;

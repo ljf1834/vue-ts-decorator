@@ -1,5 +1,7 @@
 <template>
-  <div><el-button @click="open">open drawer</el-button></div>
+  <div>
+    <el-button @click="open">open drawer</el-button>
+  </div>
 </template>
 
 <script lang="ts">
@@ -13,6 +15,7 @@ export default class extends Vue {
     this.$drawer.create({
       title: '可拖动Table',
       component: DraggableTable,
+      footed: true,
       close(e) {
         console.log(e)
       }
