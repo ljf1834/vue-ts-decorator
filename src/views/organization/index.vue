@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DraggableTable from '@/components/draggable-table.vue'
+import DraggableTable from './draggable-table.vue'
 @Component({
   name: 'organization'
 })

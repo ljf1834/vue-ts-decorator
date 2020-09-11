@@ -104,4 +104,7 @@ export default class Home extends Vue {
   line-height: 64px;
   box-shadow: 0 0 5px #ccc;
 }
+/deep/ .el-main {
+  position: relative;
+}
 </style>

@@ -3,8 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
+
 import Axios from './core/axios';
-Axios();
+Vue.use(Axios);
 
 import Storage from './utils/storage';
 Vue.use(Storage)
@@ -12,9 +16,8 @@ Vue.use(Storage)
 import Drawer from './utils/drawer';
 Vue.use(Drawer);
 
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(ElementUI);
+import Components from './components';
+Vue.use(Components);
 
 Vue.config.productionTip = false;
 
