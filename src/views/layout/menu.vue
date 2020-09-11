@@ -1,7 +1,7 @@
 <template>
   <div class="menu-container">
-    <div class="logo"><img src="@/assets/logo.png" alt="E达OA"></div>
-    <el-menu :default-active="currentRoute.path" router style="height: 100%">
+    <div class="logo"><img :class="{scale: isCollapse}" src="@/assets/logo.png" alt="E达OA"></div>
+    <el-menu :default-active="currentRoute.path" router style="height: 100%" :collapse="isCollapse">
       <template v-for="menu in list">
 
         <el-menu-item :index="menu.key" :key="menu.key" v-if="menu.isLeaf">
@@ -31,9 +31,19 @@ const routeStore = namespace('route')
   name: 'lay-menu'
 })
 export default class extends Vue {
+
   list = MenuList;
 
   @routeStore.State('currentRoute') currentRoute!: any;
+
+  private isCollapse = false;
+  created() {
+    this.$bus.$on('nav-is-collapse', (e: boolean) => this.isCollapse = e);
+  }
+  beforeDestroy() {
+    this.$bus.$off('nav-is-collapse');
+  }
+
 }
 </script>
 
@@ -51,7 +61,6 @@ export default class extends Vue {
   justify-content: center; /* 水平居中 */
   align-items: center;     /* 垂直居中 */
   box-shadow: 0 0 5px #ccc;
-  border-right: solid 1px #e6e6e6;
   background: #fff;
   position: absolute;
   top: 0;
@@ -59,9 +68,17 @@ export default class extends Vue {
   z-index: 1;
   img {
     height: 40px;
+    transition: all .3s;
+    &.scale {
+      transform: scale(.5);
+    }
   }
 }
 .menu-container > .el-menu {
   margin-top: 62px;
+  border-right: 0;
+}
+/deep/ .el-menu {
+  transition: all .3s;
 }
 </style>

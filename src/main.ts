@@ -13,6 +13,9 @@ Vue.use(Axios);
 import Storage from './utils/storage';
 Vue.use(Storage)
 
+import EventBus from './utils/event-bus';
+Vue.use(EventBus)
+
 import Drawer from './utils/drawer';
 Vue.use(Drawer);
 

@@ -1,5 +1,10 @@
 <template>
-  <div class="container">
+  <div class="header-container">
+
+    <div class="nav-fold" @click="navFolded">
+      <i :class="[ isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold' ]"></i>
+    </div>
+
     <div class="router-tabs">
       <el-tabs @tab-remove="closeTab" :value="currentRoute.path" @tab-click="tabClick">
         <el-tab-pane v-for="i in routeTabs" :key="i.path" :label="i.meta.keepAlive" :name="i.path" :closable="routeTabs.length > 1" />
@@ -29,6 +34,12 @@ const userStore = namespace('route')
   name: 'lay-header'
 })
 export default class extends Vue {
+
+  private isCollapse = false;
+  private navFolded() {
+    this.isCollapse = !this.isCollapse;
+    this.$bus.$emit('nav-is-collapse', this.isCollapse)
+  }
 
   @userStore.State('routeTabs') routeTabs!: any[];
 
@@ -64,8 +75,20 @@ export default class extends Vue {
 }
 </script>
 <style lang="less" scoped>
-.container {
+.header-container {
+  height: 60px;
   display: flex;
+  .nav-fold {
+    margin-right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    &:hover {
+      color: #409EFF;
+    }
+    &:active {
+      transform:scale(.96);
+    }
+  }
 }
 .router-tabs {
   float: left;

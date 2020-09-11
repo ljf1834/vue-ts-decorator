@@ -1,6 +1,6 @@
 <template>
   <el-container style="height: 100%">
-    <el-aside style="width: 220px; z-index: 2"><lay-menu /></el-aside>
+    <el-aside style="z-index: 2" :class="{'collapse-active': isCollapse}"><lay-menu /></el-aside>
     <el-container>
       <el-header><lay-header /></el-header>
       <el-main>
@@ -63,12 +63,17 @@ export default class Home extends Vue {
     }
   }
 
-  /* --------- 进入base页时，由于不触发路由变更，需在此添加需缓存路由 --------- */
+  private isCollapse = false;
   created() {
-    this.setCurrentRoute(this.$route);
+    this.$bus.$on('nav-is-collapse', (e: boolean) => this.isCollapse = e);
 
+    /* --------- 进入base页时，由于不触发路由变更，需在此添加需缓存路由 --------- */
+    this.setCurrentRoute(this.$route);
     let isHas = this.routeTabs.some(r => r.path === this.$route.path);
     !isHas && this.setRouteTab(this.$route);
+  }
+  beforeDestroy() {
+    this.$bus.$off('nav-is-collapse');
   }
 }
 </script>
@@ -98,6 +103,14 @@ export default class Home extends Vue {
 .slide-left-leave-active {
   opacity: 0;
   transform: translate3d(-10%, 0, 0);
+}
+/deep/ .el-aside {
+  width: 220px !important;
+  transition: all .3s;
+  border-right: solid 1px #e6e6e6;
+  &.collapse-active {
+    width: 64px !important;
+  }
 }
 /deep/ .el-header {
   height: 64px;
