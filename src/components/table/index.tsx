@@ -51,7 +51,7 @@ export default class CusTable extends Vue {
   protected render() {
     return (
       <div class="cus__table__container">
-        <el-table v-loading={ this.loading } data={ this.dataSource } tooltip-effect="dark">
+        <el-table stripe v-loading={ this.loading } data={ this.dataSource } tooltip-effect="dark">
           { this.$slots.default }
         </el-table>
         {

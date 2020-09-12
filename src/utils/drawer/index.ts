@@ -40,13 +40,15 @@ const create = (opt: DrawerCreate) => {
   }
   // 回收组件
   let remove = (val?: any) => {
-    options.close(val);
-    maskEl.className = 'drawer-mask active';
-    drawerBox.className = 'drawer-box active';
-    setTimeout(() => {
-      document.body.removeChild(carrier);
-    }, 500);
-    vm.$children[0].$destroy(); // 销毁组件
+    if (carrier && vm.$children.length) {
+      options.close(val);
+      maskEl.className = 'drawer-mask active';
+      drawerBox.className = 'drawer-box active';
+      setTimeout(() => {
+        document.body.removeChild(carrier);
+      }, 500);
+      vm.$children[0].$destroy(); // 销毁组件
+    }
   };
 
   let drawerBox = document.createElement('div');
