@@ -1,5 +1,4 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { ResponseBody } from '@/core/interfaces';
 import './table.less';
 @Component({
   name: 'cus-table',
@@ -42,7 +41,7 @@ export default class CusTable extends Vue {
       if (res.code == 200) {
         this.total = res.response.total;
         this.dataSource = res.response.data;
-      } else {
+      } else if(res.code) {
         this.$message.warning(res.message);
       }
     })

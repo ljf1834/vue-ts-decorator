@@ -1,8 +1,10 @@
 import CusQuery from './query';
 import CusTable from './table';
 import CusListPage from './list-page';
+import CusTip from './tip';
 
 const AppComponents: any = {
+  CusTip,
   CusQuery,
   CusTable,
   CusListPage

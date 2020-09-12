@@ -1,6 +1,11 @@
 <template>
   <div>
     <el-button @click="open">open drawer</el-button>
+    <el-button @click="openLoading">打开loading</el-button>
+    <cus-tip>默认内容-default</cus-tip>
+    <cus-tip type="success">默认内容-success</cus-tip>
+    <cus-tip type="error">默认内容-error</cus-tip>
+    <cus-tip type="warning">默认内容-warning</cus-tip>
   </div>
 </template>
 
@@ -21,6 +26,11 @@ export default class extends Vue {
       }
     });
   }
-
+  openLoading() {
+    this.$loading({text: '努力加载中...'});
+    setTimeout(() => {
+      this.$loading({lock: false})
+    }, 2000);
+  }
 }
 </script>
