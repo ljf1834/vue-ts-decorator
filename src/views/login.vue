@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="login-box">
-      <div class="title">登录</div>
+      <div class="title">E达OA登录</div>
       <el-form :model="formGroup" :rules="rules" ref="formGroup">
         <el-form-item prop="username">
           <el-input placeholder="请输入您的用户名" maxlength="30" prefix-icon="el-icon-user" v-model="formGroup.username" @keyup.enter.native="submit" />

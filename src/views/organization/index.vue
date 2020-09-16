@@ -27,9 +27,9 @@ export default class extends Vue {
     });
   }
   openLoading() {
-    this.$loading({text: '努力加载中...'});
+    const loading = this.$loading({text: '努力加载中...'});
     setTimeout(() => {
-      this.$loading({lock: false})
+      loading.close();
     }, 2000);
   }
 }
