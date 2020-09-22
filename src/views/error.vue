@@ -20,7 +20,7 @@ import { Component, Vue } from 'vue-property-decorator';
 })
 export default class Error extends Vue {
   beforeCreate() {
-    console.log(this.$route.params.type)
+    // console.log(this.$route.params.type)
   }
 }
 </script>

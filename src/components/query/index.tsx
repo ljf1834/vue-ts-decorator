@@ -8,6 +8,8 @@ export default class CusQuery extends Vue {
 
   @Prop() nodes!: any[];
 
+  @Prop({ default: 'small' }) size!: string;
+
   private formGroup: any = {};
 
   constructor(props) {
@@ -36,7 +38,7 @@ export default class CusQuery extends Vue {
 
   protected render() {
     return (
-      <el-form inline ref="formGroup" label-width="82px" class="cus__query__container">
+      <el-form inline ref="formGroup" label-width="82px" class={[this.size, 'cus__query__container']}>
         <input type="text" style="display:none" />
         {this.nodes.map((node: any) => {
           return (
@@ -48,6 +50,7 @@ export default class CusQuery extends Vue {
                     return (
                       <el-input
                         clearable
+                        size={this.size}
                         value={this.formGroup[n.key]}
                         onInput={(v: string) => { this.formGroup[n.key] = v }}
                         placeholder={n.placeholder || `请输入${n.label}`}
@@ -60,6 +63,7 @@ export default class CusQuery extends Vue {
                     return (
                       <el-input-number
                         clearable
+                        size={this.size}
                         controls-position="right"
                         value={this.formGroup[n.key]}
                         onInput={(v: number) => { this.formGroup[n.key] = v }}
@@ -73,6 +77,7 @@ export default class CusQuery extends Vue {
                     return (
                       <el-select 
                         clearable
+                        size={this.size}
                         value={this.formGroup[n.key]}
                         onInput={(v) => { this.formGroup[n.key] = v }}
                         placeholder={n.placeholder || `请选择${n.label}`}>
@@ -89,6 +94,7 @@ export default class CusQuery extends Vue {
                     return (
                       <el-date-picker
                         type="date"
+                        size={this.size}
                         value-format={node.format || 'yyyy-MM-dd'}
                         value={this.formGroup[n.key]}
                         onInput={(v) => { this.formGroup[n.key] = v }}
@@ -101,6 +107,7 @@ export default class CusQuery extends Vue {
                     return (
                       <el-date-picker
                         type="daterange"
+                        size={this.size}
                         value-format={node.format || 'yyyy-MM-dd'}
                         range-separator="~"
                         value={this.formGroup[n.key]}
@@ -113,9 +120,10 @@ export default class CusQuery extends Vue {
                   case 'between': {
                     let n = node as NBetween;
                     return (
-                      <el-input readonly value="~">
+                      <el-input readonly value="~" size={this.size} style="vertical-align: initial">
                         <el-input
                           clearable
+                          size={this.size}
                           slot="prepend"
                           style={{width: '100px'}}
                           value={this.formGroup[n.keys[0]]}
@@ -125,6 +133,7 @@ export default class CusQuery extends Vue {
                         />
                         <el-input
                           clearable
+                          size={this.size}
                           slot="append"
                           style={{ width: '100px' }}
                           value={this.formGroup[n.keys[1]]}
@@ -143,8 +152,8 @@ export default class CusQuery extends Vue {
           )
         })}
         <el-form-item label=" ">
-          <el-button type="primary" onClick={ this.submit }>查询</el-button>
-          <el-button onClick={ this.reset }>重置</el-button>
+          <el-button type="primary" size={this.size} onClick={ this.submit }>查询</el-button>
+          <el-button size={this.size} onClick={ this.reset }>重置</el-button>
         </el-form-item>
       </el-form>
     );
