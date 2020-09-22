@@ -1,35 +1,35 @@
 import Vue, { Component } from 'vue';
 import './drawer.less';
 
-const create = (opt: DrawerCreate) => {
+const create = (opt: DrawerCreate): Vue => {
   let options = {
     title: opt.title || null,
     width: opt.width || 720,
     component: opt.component,
     props: opt.props || {},
+    zIndex: opt.zIndex || 200,
     mask: typeof opt.mask === 'undefined' ? true : opt.mask,
     maskClosable: typeof opt.maskClosable === 'undefined' ? true : opt.maskClosable,
     closable: typeof opt.closable === 'undefined' ? true : opt.closable,
-    close: opt.close || ((val?: any) => {}),
-    footed: typeof opt.footed === 'undefined' ? false : opt.footed,
+    footed: typeof opt.footed === 'undefined' ? false : opt.footed
   }
 
   const vm = new Vue({
     // render 生成虚拟dom
     render: h => h(options.component, { 
       props: {
-        ...options.props,
-        drawerClose(val?: any) {
-          remove(val);
-        }
+        ...options.props
       }
     })
   }).$mount(); // $mount 生成真实dom, 挂载dom 挂载在哪里, 不传参的时候只生成不挂载，需要手动挂载
+
+  let drawerRef: Vue = vm.$children[0];
 
   const carrier = document.createElement('div');
 
   let maskEl: HTMLElement = document.createElement('div');
   maskEl.className = 'drawer-mask';
+  maskEl.style.zIndex = `${options.zIndex}`;
   if (options.mask) {
     carrier.appendChild(maskEl);
     if (options.maskClosable) {
@@ -39,9 +39,8 @@ const create = (opt: DrawerCreate) => {
     }
   }
   // 回收组件
-  let remove = (val?: any) => {
+  let remove = (val?) => {
     if (carrier && vm.$children.length) {
-      options.close(val);
       maskEl.className = 'drawer-mask active';
       drawerBox.className = 'drawer-box active';
       setTimeout(() => {
@@ -54,6 +53,7 @@ const create = (opt: DrawerCreate) => {
   let drawerBox = document.createElement('div');
   drawerBox.className = 'drawer-box';
   drawerBox.style.width = options.width + 'px';
+  drawerBox.style.zIndex = `${options.zIndex + 1}`;
 
   let drawerBody = document.createElement('div');
   drawerBody.className = 'drawer-body';
@@ -80,20 +80,21 @@ const create = (opt: DrawerCreate) => {
     saveBtn.className = 'drawer-save-btn';
     closeBtn.innerHTML = '<span>取消</span>';
     saveBtn.innerHTML = '<span>确定</span>';
-    closeBtn.onclick = () => { remove(); }
-    saveBtn.onclick = () => {
-      let vmDW: any = vm.$children[0]
-      if (vmDW.confirm) {
+    drawerRef.$on('loading', (e: boolean) => {
+      if (e) {
         saveBtn.innerHTML = `<i class="el-icon-loading"></i><span>加载中</span>`;
         saveBtn.className = 'drawer-save-btn loading';
-        vmDW.confirm().then((res: any) => {
-          saveBtn.innerHTML = `<span>确定</span>`;
-          saveBtn.className = 'drawer-save-btn';
-          res && remove(res);
-        }).catch((err: any) => {
-          saveBtn.innerHTML = `<span>确定</span>`;
-          saveBtn.className = 'drawer-save-btn';
-        })
+      } else {
+        saveBtn.innerHTML = `<span>确定</span>`;
+        saveBtn.className = 'drawer-save-btn';
+      }
+    });
+    closeBtn.onclick = () => { remove(); }
+    saveBtn.onclick = () => {
+      if (drawerRef['save'] && drawerRef['save'].constructor === Function) {
+        drawerRef['save']();
+      } else {
+        console.warn(`请在 ${options.component.name} Component 中定义 save 方法`);
       }
     }
     drawerFooter.appendChild(closeBtn)
@@ -103,6 +104,11 @@ const create = (opt: DrawerCreate) => {
 
   carrier.appendChild(drawerBox);
   document.body.appendChild(carrier);
+
+
+  drawerRef.$on('close', remove)
+
+  return drawerRef;
   
 }
 
@@ -110,18 +116,18 @@ export default { install: (vue: any) => (vue.prototype.$drawer = { create }) };
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $drawer: { create: (options: DrawerCreate) => void }
+    $drawer: { create: (options: DrawerCreate) => Vue }
   }
 }
 
 interface DrawerCreate {
   title?: string;
   width?: number;
-  component?: Component;     // 子组件
+  component: Component;     // 子组件
   mask?: boolean;          // 是否展示遮罩
+  zIndex?: number;
   maskClosable?: boolean;  // 点击蒙层是否允许关闭
   closable?: boolean;      // 是否展示右上角关闭按钮
   props?: object;          // 传入子组件的值
-  close?: (val?: any) => void;
   footed?: boolean;         // 是否拥有默认页脚
 }

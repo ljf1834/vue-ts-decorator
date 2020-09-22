@@ -31,6 +31,12 @@ const MenuList: RouterConf[] = [
       },
     ]
   },
+  {
+    title: 'drawer',
+    key: '/drawer',
+    icon: 'el-icon-s-home',
+    isLeaf: true
+  },
 ]
 
 export default MenuList;

@@ -18,6 +18,11 @@ const routes: RouteConfig[] = [
         meta: { keepAlive: '组织架构' },
         component: () => import('@/views/organization/index.vue')
       },
+      {
+        path: 'drawer',
+        name: 'drawer',
+        component: () => import('@/views/drawer/index')
+      },
     ]
   },
   {

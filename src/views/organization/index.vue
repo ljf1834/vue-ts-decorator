@@ -17,14 +17,12 @@ import DraggableTable from './draggable-table.vue'
 })
 export default class extends Vue {
   open() {
-    this.$drawer.create({
+    let drawerRef = this.$drawer.create({
       title: '可拖动Table',
       component: DraggableTable,
       footed: true,
-      close(e) {
-        console.log(e)
-      }
     });
+    drawerRef.$on('close', (e) => console.log(e))
   }
   openLoading() {
     const loading = this.$loading({text: '努力加载中...'});
