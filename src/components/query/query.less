@@ -1,18 +1,4 @@
 .cus__query__container {
-  &.small {
-    .el-form-item {
-      margin-bottom: 12px;
-    }
-    .el-date-editor--date .el-input__suffix {
-      height: 30px;
-      line-height: 30px;
-      top: 5px;
-    }
-    .el-range-editor .el-range__close-icon {
-      height: 30px;
-      line-height: 30px;
-    }
-  }
   .el-form-item__content > div {
     width: 226px;
   }
@@ -53,27 +39,23 @@
       left: auto;
       right: 5px;
     }
-    .el-input__suffix {
-      height: 38px;
-      top: 1px;
+    &:hover .el-input__suffix {
+      border-top: 1px solid #DCDFE6;
+      border-bottom: 1px solid #DCDFE6;
       background: #fff;
+      box-sizing: border-box;
     }
   }
   .el-range-editor {
     .el-icon-date {
       position: absolute;
       top: 0;
-      right: 5px;
+      right: 10px;
+      pointer-events: none;
     }
-    .el-range__close-icon {
-      height: 38px;
-      position: absolute;
-      top: 0;
-      right: 5px;
-      transition: none;
-      &.el-icon-circle-close {
+    &:hover .el-range__close-icon {
       background: #fff;
-      }
+      z-index: 1;
     }
   }
 }

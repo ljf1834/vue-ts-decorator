@@ -10,6 +10,18 @@
         <el-tab-pane v-for="i in routeTabs" :key="i.path" :label="i.meta.keepAlive" :name="i.path" :closable="routeTabs.length > 1" />
       </el-tabs>
     </div>
+
+    <div class="default-size">
+      <el-tooltip content="布局大小" placement="bottom">
+        <el-dropdown @command="defautlSizeChange" trigger="click">
+            <i class="cus-icon">&#xe608;</i>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item v-for="s in sizeList" :key="s.v" :command="s.v"  :disabled="size === s.v">{{ s.t }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-tooltip>
+    </div>
+
     <div class="header-user">
       <el-dropdown @command="commandList.get($event)()">
         <div class="el-dropdown-link">
@@ -41,6 +53,13 @@ export default class extends Vue {
     this.$bus.$emit('nav-is-collapse', this.isCollapse)
   }
 
+  private size = this.$storage.get('size') || 'default';
+  private sizeList = [{v: 'default', t: '默认'}, {v: 'medium', t: '中等'}, {v: 'small', t: '小型'}, {v: 'mini', t: '超小型'}]
+  private defautlSizeChange(size: string) {
+    this.$storage.set('size', size);
+    location.reload();
+  }
+
   @userStore.State('routeTabs') routeTabs!: any[];
 
   @userStore.State('currentRoute') currentRoute!: any;
@@ -56,7 +75,7 @@ export default class extends Vue {
         key.includes(path) && delete cache[key];
       })
     } catch (error) {
-      console.warn('清楚keep-alive缓存失败');
+      console.warn('清除 keep-alive 缓存失败');
     }
     this.removeRouteTab(path);
     let toPath = this.routeTabs[this.routeTabs.length - 1].path;
@@ -97,27 +116,39 @@ export default class extends Vue {
 .header-user {
   flex: 0 0 auto;
   cursor: pointer;
-  margin-left: 40px;
+  margin-left: 10px;
 }
-/deep/ .el-tabs__header {
+::v-deep .el-tabs__header {
   margin-top: -2px;
 }
-/deep/ .el-tabs__header {
+::v-deep .el-tabs__header {
   margin-bottom: 0;
 }
-/deep/ .el-tabs__nav-wrap::after {
+::v-deep .el-tabs__nav-wrap::after {
   display: none;
 }
-/deep/ .el-tabs__nav-next, .el-tabs__nav-prev {
+::v-deep .el-tabs__nav-next, .el-tabs__nav-prev {
   line-height: 45px;
   font-size: 15px;
   cursor: pointer;
 }
-/deep/ .el-avatar {
+::v-deep .el-avatar {
   vertical-align: middle;
   margin-right: 8px;
 }
 .user-name {
   margin-right: 3px;
+}
+.default-size {
+  padding: 0 12px;
+  &:hover {
+    background: #f9f9f9;
+  }
+  i {
+    cursor: pointer;
+    font-size: 22px;
+    font-family: "cusfont" !important;
+    font-style: normal;
+  }
 }
 </style>
