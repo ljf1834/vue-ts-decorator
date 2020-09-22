@@ -20,7 +20,6 @@ export default class Demo extends Vue {
   protected render() {
     return (
       <div>
-        <el-button onClick={this.toggleSize}>toggle size</el-button>
         <el-button onClick={this.openDrawer}>drawer open</el-button>
       </div>
     )

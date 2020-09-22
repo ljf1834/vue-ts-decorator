@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button @click="open">open drawer</el-button>
     <el-button @click="openLoading">打开loading</el-button>
     <cus-tip>默认内容-default</cus-tip>
     <cus-tip type="success">默认内容-success</cus-tip>
@@ -11,19 +10,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DraggableTable from './draggable-table.vue'
+
 @Component({
   name: 'organization'
 })
 export default class extends Vue {
-  open() {
-    let drawerRef = this.$drawer.create({
-      title: '可拖动Table',
-      component: DraggableTable,
-      footed: true,
-    });
-    drawerRef.$on('close', (e) => console.log(e))
-  }
   openLoading() {
     const loading = this.$loading({text: '努力加载中...'});
     setTimeout(() => {
