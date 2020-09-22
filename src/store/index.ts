@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import routeStore from './route-store';
+import routeStore from './modules/route-store';
+import keepAliveViews from './modules/keep-alive-views';
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    route: routeStore
+    route: routeStore,
+    keepAliveViews
   }
 })

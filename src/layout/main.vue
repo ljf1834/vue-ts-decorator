@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import { Component, Watch, Vue } from 'vue-property-decorator';
-import LayMenu from '@/views/layout/menu.vue';
-import LayHeader from '@/views/layout/header.vue';
+import LayMenu from './menu.vue';
+import LayHeader from './header.vue';
 import { namespace } from 'vuex-class';
 const userStore = namespace('route')
 @Component({

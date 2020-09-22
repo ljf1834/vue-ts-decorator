@@ -4,7 +4,7 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     redirect: '/index',
-    component: () => import('@/views/base.vue'),
+    component: () => import('@/layout/main.vue'),
     children: [
       {
         path: 'index',
