@@ -18,28 +18,22 @@
 import { Component, Watch, Vue } from 'vue-property-decorator';
 import LayMenu from './menu.vue';
 import LayHeader from './header.vue';
-import { namespace } from 'vuex-class';
-const routeStore = namespace('route')
+import RouteStore from '@/store/modules/route';
+
 @Component({
   components: { LayMenu, LayHeader },
   beforeRouteLeave(to: any, from: any, next: Function) {
-    (this as any).removeRouteTab(null);
+    RouteStore.REMOVE_ROUTE_TAB(null);
     next();
   }
 })
 export default class Home extends Vue {
   
-  transitionName = '';
+  private transitionName = '';
 
-  keepAlive: any[] = [];
+  private keepAlive: any[] = [];
 
-  @routeStore.Mutation('setRouteTab') setRouteTab!: Function;
-
-  @routeStore.Mutation('setCurrentRoute') setCurrentRoute!: Function;
-
-  @routeStore.Mutation('removeRouteTab') removeRouteTab!: any;
-
-  @routeStore.State('routeTabs') routeTabs!: any[];
+  get routeTabs() { return RouteStore.routeTabs }
 
   @Watch('routeTabs')
   tabsChange() {
@@ -48,11 +42,10 @@ export default class Home extends Vue {
 
   @Watch('$route')
   routeChange(to: any, from: any) {
-    this.setCurrentRoute(to);
     if (to.meta.keepAlive) {
       let isHas = this.routeTabs.some(n => n.name === to.name);
       if (!isHas) {
-        this.setRouteTab(to);
+        RouteStore.SET_ROUTE_TAB(to);
       }
     }
     /* ------------- 转场动画 ------------- */
@@ -68,9 +61,8 @@ export default class Home extends Vue {
     this.$bus.$on('nav-is-collapse', (e: boolean) => this.isCollapse = e);
 
     /* --------- 进入base页时，由于不触发路由变更，需在此添加需缓存路由 --------- */
-    this.setCurrentRoute(this.$route);
     let isHas = this.routeTabs.some(r => r.path === this.$route.path);
-    !isHas && this.setRouteTab(this.$route);
+    !isHas && RouteStore.SET_ROUTE_TAB(this.$route);
   }
   beforeDestroy() {
     this.$bus.$off('nav-is-collapse');

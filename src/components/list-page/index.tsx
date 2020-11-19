@@ -16,7 +16,7 @@ export default class CusListPage extends Vue {
           nodes={this.queryNodes}
           onSubmit={(event: object) => (this.$refs.table as CusTable).request(event)}
         />
-        <cus-talbe ref="table" url={this.url}>
+        <cus-talbe ref="table" url={ this.url }>
           { this.$slots.default }
         </cus-talbe>
       </div>

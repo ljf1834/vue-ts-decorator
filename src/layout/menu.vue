@@ -1,7 +1,7 @@
 <template>
   <div class="menu-container">
     <div class="logo"><img :class="{scale: isCollapse}" src="@/assets/logo.png" alt="E达OA"></div>
-    <el-menu :default-active="currentRoute.path" router style="height: 100%" :collapse="isCollapse">
+    <el-menu :default-active="$route.path" router style="height: 100%" :collapse="isCollapse">
       <template v-for="menu in list">
 
         <el-menu-item :index="menu.key" :key="menu.key" v-if="menu.isLeaf">
@@ -25,20 +25,18 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import MenuList from '@/router/menu-list';
-import { namespace } from 'vuex-class';
-const routeStore = namespace('route')
+import RouteStore from '@/store/modules/route';
+
 @Component({
   name: 'lay-menu'
 })
 export default class extends Vue {
 
-  list = MenuList;
-
-  @routeStore.State('currentRoute') currentRoute!: any;
+  private list = MenuList;
 
   private isCollapse = false;
   created() {
-    this.$bus.$on('nav-is-collapse', (e: boolean) => this.isCollapse = e);
+    this.$bus.$on('nav-is-collapse', (e) => this.isCollapse = e);
   }
   beforeDestroy() {
     this.$bus.$off('nav-is-collapse');

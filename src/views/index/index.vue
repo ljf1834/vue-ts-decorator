@@ -1,7 +1,7 @@
 <template>
   <div>
     <cus-query :nodes="nodes" @submit="$refs.table.request($event)" />
-    <cus-table ref="table" url="/list" :auto="false">
+    <cus-table ref="table" url="/list" :auto-request="false">
       <el-table-column prop="id" label="id" />
     </cus-table>
   </div>

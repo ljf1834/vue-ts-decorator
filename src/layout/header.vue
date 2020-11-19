@@ -6,7 +6,7 @@
     </div>
 
     <div class="router-tabs">
-      <el-tabs @tab-remove="closeTab" :value="currentRoute.path" @tab-click="tabClick">
+      <el-tabs @tab-remove="closeTab" :value="$route.path" @tab-click="tabClick">
         <el-tab-pane v-for="i in routeTabs" :key="i.path" :label="i.meta.keepAlive" :name="i.path" :closable="routeTabs.length > 1" />
       </el-tabs>
     </div>
@@ -40,8 +40,8 @@
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { namespace } from 'vuex-class';
-const userStore = namespace('route')
+import RouteStore from '@/store/modules/route';
+
 @Component({
   name: 'lay-header'
 })
@@ -60,16 +60,12 @@ export default class extends Vue {
     location.reload();
   }
 
-  @userStore.State('routeTabs') routeTabs!: any[];
+  get routeTabs() { return RouteStore.routeTabs }
 
-  @userStore.State('currentRoute') currentRoute!: any;
-
-  @userStore.Mutation('removeRouteTab') removeRouteTab!: Function;
-
-  closeTab(path: string) {
+  private closeTab(path: string) {
     /* ------------ 找到 keep-alive 暴力删除其 Cache */
     try {
-      let vueComponent: any = this.$parent.$parent.$children[1].$vnode.componentInstance?.$children[0].$vnode.parent?.componentInstance
+      let vueComponent: any = this.$parent.$parent.$children[1].$vnode.componentInstance?.$children[0].$vnode.parent?.componentInstance;
       let cache = vueComponent.cache;
       Object.keys(cache).map((key: string) => {
         key.includes(path) && delete cache[key];
@@ -77,20 +73,20 @@ export default class extends Vue {
     } catch (error) {
       console.warn('清除 keep-alive 缓存失败');
     }
-    this.removeRouteTab(path);
+    RouteStore.REMOVE_ROUTE_TAB(path);
     let toPath = this.routeTabs[this.routeTabs.length - 1].path;
-    toPath !== this.currentRoute.path && this.$router.push(toPath);
+    toPath !== this.$route.path && this.$router.push(toPath);
   }
 
-  tabClick(el: any) {
+  private tabClick(el: any) {
     this.$route.path !== el.name && this.$router.push(el.name);
   }
 
-  commandList = new Map([
+  private commandList = new Map([
     ['logout', () => this.$router.push('/login')]
   ]);
   
-  avatar = require('@/assets/default-boy.png');
+  private avatar = require('@/assets/default-boy.png');
 }
 </script>
 <style lang="less" scoped>

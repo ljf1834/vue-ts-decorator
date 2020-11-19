@@ -25,6 +25,8 @@ Vue.use(Components);
 
 Vue.config.productionTip = false;
 
+window.console.log = process.env.NODE_ENV === 'development' ? window.console.log : () => {}
+
 new Vue({
   router,
   store,

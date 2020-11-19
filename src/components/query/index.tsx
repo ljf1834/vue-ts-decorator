@@ -8,6 +8,8 @@ export default class CusQuery extends Vue {
 
   @Prop() nodes!: any[];
 
+  @Prop({ default: 'default' }) mode!: 'default' | 'simple';
+
   private formGroup: any = {};
 
   constructor(props) {
@@ -17,7 +19,7 @@ export default class CusQuery extends Vue {
         this.formGroup[node.keys[0]] = null; 
         this.formGroup[node.keys[1]] = null; 
       } else {
-        this.formGroup[node.key] = undefined;
+        this.formGroup[node.key] = node.default;
       }
       if (node.url) {
         this.axios.post(node.url).then((res: any) => node.options = [...res.result, ...(node.options || [])]);
@@ -25,12 +27,12 @@ export default class CusQuery extends Vue {
     })
   }
 
-  submit() {
+  private submit() {
     let data = { ...this.formGroup };
     Object.keys(data).map(key => (data[key] === undefined || data[key] === null || data[key] === '') && delete data[key]);
     this.$emit('submit', data);
   }
-  reset() {
+  private reset() {
     Object.keys(this.formGroup).map(key => this.formGroup[key] = undefined);
   }
 
@@ -74,7 +76,7 @@ export default class CusQuery extends Vue {
                       <el-select 
                         clearable
                         value={this.formGroup[n.key]}
-                        onInput={(v) => { this.formGroup[n.key] = v }}
+                        onInput={(v) => { this.formGroup[n.key] = v; this.mode === 'simple' && this.submit(); }}
                         placeholder={n.placeholder || `请选择${n.label}`}>
                         {
                           n.options?.map(option => (
@@ -91,7 +93,7 @@ export default class CusQuery extends Vue {
                         type="date"
                         value-format={node.format || 'yyyy-MM-dd'}
                         value={this.formGroup[n.key]}
-                        onInput={(v) => { this.formGroup[n.key] = v }}
+                        onInput={(v) => { this.formGroup[n.key] = v; this.mode === 'simple' && this.submit(); }}
                         placeholder={n.placeholder || `请选择${n.label}`}
                       />
                     )
@@ -104,7 +106,7 @@ export default class CusQuery extends Vue {
                         value-format={node.format || 'yyyy-MM-dd'}
                         range-separator="~"
                         value={this.formGroup[n.key]}
-                        onInput={(v) => { this.formGroup[n.key] = v }}
+                        onInput={(v) => { this.formGroup[n.key] = v; this.mode === 'simple' && this.submit(); }}
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                       />
@@ -135,17 +137,23 @@ export default class CusQuery extends Vue {
                       </el-input>
                     )
                   }
-                  default:
-                    break;
+                  default: {
+                    return (<span>“{ node.type }” 类型未被支持</span>)
+                  }
                 }  
               })()
             }</el-form-item>
           )
         })}
-        <el-form-item label=" ">
-          <el-button type="primary" onClick={ this.submit }>查询</el-button>
-          <el-button onClick={ this.reset }>重置</el-button>
-        </el-form-item>
+        
+        {
+          this.mode !== 'simple' && (
+            <el-form-item label=" ">
+              <el-button type="primary" onClick={this.submit}>查询</el-button>
+              <el-button onClick={this.reset}>重置</el-button>
+            </el-form-item>
+          )
+        }
       </el-form>
     );
   }

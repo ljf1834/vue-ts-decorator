@@ -5,6 +5,8 @@
     <cus-tip type="success">默认内容-success</cus-tip>
     <cus-tip type="error">默认内容-error</cus-tip>
     <cus-tip type="warning">默认内容-warning</cus-tip>
+
+    <input type="text">
   </div>
 </template>
 
@@ -19,7 +21,7 @@ export default class extends Vue {
     const loading = this.$loading({text: '努力加载中...'});
     setTimeout(() => {
       loading.close();
-    }, 2000);
+    }, 1000);
   }
 }
 </script>

@@ -6,7 +6,7 @@ import './table.less';
 export default class CusTable extends Vue {
   @Prop() url!: string;
   @Prop({ default: () => [] }) dataSet!: any[];
-  @Prop({ default: true }) auto!: boolean;
+  @Prop({ default: true }) autoRequest!: boolean;
   @Prop({ default: () => {} }) default!: object;
   @Prop({ default: () => { } }) init!: object;
   @Prop({ default: true }) hasPage!: boolean;
@@ -21,7 +21,7 @@ export default class CusTable extends Vue {
 
   constructor(props) {
     super(props)
-    this.auto && this.request();
+    this.autoRequest && this.request();
   }
 
   public request(params?: object) {
@@ -60,7 +60,10 @@ export default class CusTable extends Vue {
               total={ this.total }
               hide-on-single-page={ true }
               current-page={ this.pageNo }
-              on={{...{'current-change': (e: number) => { this.pageNo = e; this.request(); }}}}
+              on={{...{ 
+                'current-change': (e: number) => { this.pageNo = e; this.request(); },
+                'selection-change': (e) => { this.$emit('selecttion-change', e) }
+              }}}
               layout="total, sizes, prev, pager, next" 
               on-size-change={(e: number) => { this.pageSize = e; this.request() }}>
             </el-pagination>
