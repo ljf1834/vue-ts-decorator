@@ -37,6 +37,12 @@ const MenuList: RouterConf[] = [
     icon: 'el-icon-s-home',
     isLeaf: true
   },
+  {
+    title: 'approval',
+    key: '/approval',
+    icon: 'el-icon-s-home',
+    isLeaf: true
+  },
 ]
 
 export default MenuList;

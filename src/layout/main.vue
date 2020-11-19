@@ -19,7 +19,7 @@ import { Component, Watch, Vue } from 'vue-property-decorator';
 import LayMenu from './menu.vue';
 import LayHeader from './header.vue';
 import { namespace } from 'vuex-class';
-const userStore = namespace('route')
+const routeStore = namespace('route')
 @Component({
   components: { LayMenu, LayHeader },
   beforeRouteLeave(to: any, from: any, next: Function) {
@@ -33,13 +33,13 @@ export default class Home extends Vue {
 
   keepAlive: any[] = [];
 
-  @userStore.Mutation('setRouteTab') setRouteTab!: Function;
+  @routeStore.Mutation('setRouteTab') setRouteTab!: Function;
 
-  @userStore.Mutation('setCurrentRoute') setCurrentRoute!: Function;
+  @routeStore.Mutation('setCurrentRoute') setCurrentRoute!: Function;
 
-  @userStore.Mutation('removeRouteTab') removeRouteTab!: any;
+  @routeStore.Mutation('removeRouteTab') removeRouteTab!: any;
 
-  @userStore.State('routeTabs') routeTabs!: any[];
+  @routeStore.State('routeTabs') routeTabs!: any[];
 
   @Watch('routeTabs')
   tabsChange() {
@@ -104,7 +104,7 @@ export default class Home extends Vue {
   opacity: 0;
   transform: translate3d(-10%, 0, 0);
 }
-/deep/ .el-aside {
+::v-deep .el-aside {
   width: 220px !important;
   transition: all .3s;
   border-right: solid 1px #e6e6e6;
@@ -112,12 +112,12 @@ export default class Home extends Vue {
     width: 64px !important;
   }
 }
-/deep/ .el-header {
+::v-deep .el-header {
   height: 64px;
   line-height: 64px;
   box-shadow: 0 0 5px #ccc;
 }
-/deep/ .el-main {
+::v-deep .el-main {
   position: relative;
 }
 </style>

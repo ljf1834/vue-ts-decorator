@@ -1,7 +1,5 @@
 const routeStore =  {
   state: () => ({
-    goPath: null,
-    toPath: null,
     currentRoute: null,
     routeTabs: []
   }),

@@ -23,6 +23,11 @@ const routes: RouteConfig[] = [
         name: 'drawer',
         component: () => import('@/views/drawer/index')
       },
+      {
+        path: 'approval',
+        name: 'approval',
+        component: () => import('@/views/approval/index.vue')
+      },
     ]
   },
   {
