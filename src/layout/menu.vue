@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import MenuList from '@/router/menu-list';
+import MenuList from '@/core/menu-list';
 import RouteStore from '@/store/modules/route';
 
 @Component({
