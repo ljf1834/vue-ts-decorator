@@ -50,7 +50,10 @@ export default class CusTable extends Vue {
   protected render() {
     return (
       <div class="cus__table__container">
-        <el-table stripe v-loading={ this.loading } data={ this.dataSource } tooltip-effect="dark">
+        <el-table stripe v-loading={this.loading} data={this.dataSource}
+          on={{
+            'selection-change': (e) => {this.$emit('selecttion-change', e) }
+          }} tooltip-effect="dark">
           { this.$slots.default }
         </el-table>
         {
@@ -61,8 +64,7 @@ export default class CusTable extends Vue {
               hide-on-single-page={ true }
               current-page={ this.pageNo }
               on={{...{ 
-                'current-change': (e: number) => { this.pageNo = e; this.request(); },
-                'selection-change': (e) => { this.$emit('selecttion-change', e) }
+                'current-change': (e: number) => { this.pageNo = e; this.request(); }
               }}}
               layout="total, sizes, prev, pager, next" 
               on-size-change={(e: number) => { this.pageSize = e; this.request() }}>
